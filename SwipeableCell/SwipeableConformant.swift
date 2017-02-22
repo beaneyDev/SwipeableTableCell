@@ -17,6 +17,7 @@ class SwipeableConformant: UITableViewCell, SwipeableCell {
     var leftResetPosition: CGFloat = 200.0
     var rightResetPosition: CGFloat = 200.0
     var action1: UIView!
+    var actionWidth: CGFloat = 200.0
     
     func configurePanGestures() -> UIPanGestureRecognizer {
         let pan: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SwipeableConformant.didPan(sender:)))

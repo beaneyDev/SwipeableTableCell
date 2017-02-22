@@ -10,12 +10,16 @@ import Foundation
 import UIKit
 
 protocol SwipeableCell: class {
+    //Pannable container properties
     var pannableContainer: UIView! { get set }
     var left: NSLayoutConstraint! { get set }
     var right: NSLayoutConstraint! { get set }
     var leftResetPosition: CGFloat { get set }
     var rightResetPosition: CGFloat { get set }
+    
+    //Action properties
     var action1: UIView! { get set }
+    var actionWidth: CGFloat { get set }
     
     func createPannable()
     func layout()
@@ -54,7 +58,7 @@ extension SwipeableCell where Self: UITableViewCell {
         //Layout the actions
         let action1Height = NSLayoutConstraint.constraints(withVisualFormat: "V:|[action]|", options: [], metrics: nil, views: ["action": action1])
         let action1Left = NSLayoutConstraint(item: action1, attribute: .leading, relatedBy: .equal, toItem: pannableContainer, attribute: .trailing, multiplier: 1.0, constant: 0.0)
-        let action1Width = NSLayoutConstraint(item: action1, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 100.0)
+        let action1Width = NSLayoutConstraint(item: action1, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: actionWidth)
         self.addConstraints(action1Height)
         self.addConstraints([action1Width, action1Left])
     }
@@ -69,13 +73,22 @@ extension SwipeableCell where Self: UITableViewCell {
             let presentOptionsLeft = left.constant > leftResetPosition && left.constant > 0
             let presentOptionsRight = right.constant < rightResetPosition && right.constant < 0
             
+            print("RIGHT CONSTRAINT: ", right.constant)
+            print("LEFT CONSTRAINT: ", left.constant)
+            print("RIGHT RESET POSITION: ", rightResetPosition)
+            print("LEFT RESET POSITION: ", leftResetPosition)
+            
             if resetLeft {
                 forcePan()
+                print("HIDING LEFT")
             } else if resetRight {
                 forcePan()
+                print("HIDING RIGHT")
             } else if presentOptionsLeft {
                 forcePan(left: 200.0, right: 200.0)
+                print("PRESENTING LEFT")
             } else if presentOptionsRight {
+                print("PRESENTING RIGHT")
                 forcePan(left: -200.0, right: -200.0)
             }
         }
